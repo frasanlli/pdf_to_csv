@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF to Excel</title>
+  <link href="style.css" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- TOOLBAR -->
+    <header id="toolbar">
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+
+        <span class="fw-semibold text-secondary me-2" style="font-size:13px; white-space:nowrap;">
+          <i class="bi bi-file-earmark-pdf me-1 text-danger"></i>PDF Región Selector
+        </span>
+
+        <div class="toolbar-sep"></div>
+
+        <label class="btn btn-sm btn-outline-secondary btn-toolbar-action mb-0" style="cursor:pointer;">
+          <i class="bi bi-upload"></i> Cargar PDF
+          <input type="file" accept="application/pdf" id="pdf-input" class="d-none" />
+        </label>
+
+        <div class="toolbar-sep"></div>
+
+        <div class="d-flex align-items-center gap-1">
+          <button id="prev-btn" class="btn btn-sm btn-outline-secondary px-2" title="Página anterior">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <span id="page-info">— / —</span>
+          <button id="next-btn" class="btn btn-sm btn-outline-secondary px-2" title="Siguiente página">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
+        <div class="d-flex align-items-center gap-1">
+          <button id="zoom-out" class="btn btn-sm btn-outline-secondary px-2" title="Reducir zoom">
+            <i class="bi bi-zoom-out"></i>
+          </button>
+          <span id="zoom-info">100%</span>
+          <button id="zoom-in" class="btn btn-sm btn-outline-secondary px-2" title="Ampliar zoom">
+            <i class="bi bi-zoom-in"></i>
+          </button>
+        </div>
+
+        <div class="toolbar-sep d-none d-md-block"></div>
+
+        <span class="badge bg-light text-secondary border d-none d-md-inline-flex align-items-center gap-1"
+          style="font-size:11px;">
+          <i class="bi bi-bounding-box-circles"></i> Arrastra para seleccionar
+        </span>
+
+        <div id="pdf-actions" class="ms-auto d-flex gap-2 d-none">
+        <button id="clear-btn" class="btn btn-sm btn-outline-secondary btn-toolbar-action">
+          <i class="bi bi-eraser"></i> Limpiar página
+        </button>
+        <button id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action">
+          <i class="bi bi-trash3"></i> Borrar todo
+        </button>
+        <button id="export-btn" class="btn btn-sm btn-primary btn-toolbar-action">
+          <i class="bi bi-download"></i> Exportar JSON
+        </button>
+        <button id="extract-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
+          <i class="bi bi-text-paragraph"></i> Extraer texto
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <div id="main">
+
+      <!-- Canvas área -->
+      <div id="canvas-area">
+        <div id="placeholder">
+          <i class="bi bi-file-earmark-arrow-up" style="font-size:52px;"></i>
+          <div class="text-center">
+            <p class="mb-1 fw-semibold" style="font-size:15px; color:#6c757d;">Carga un PDF para empezar</p>
+            <p style="font-size:12px; color:#adb5bd;">Haz clic en "Cargar PDF" en la barra superior</p>
+          </div>
+        </div>
+        <div id="pdf-wrapper">
+          <canvas id="pdf-canvas"></canvas>
+          <canvas id="overlay-canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="px-3 py-2 border-bottom d-flex align-items-center justify-content-between">
+          <span class="fw-semibold" style="font-size:13px;">Áreas seleccionadas</span>
+          <span id="area-count" class="badge bg-secondary rounded-pill">0</span>
+        </div>
+
+        <div id="areas-list">
+          <p id="empty-msg" class="text-center text-muted mt-4" style="font-size:12px;">Sin selección</p>
+        </div>
+
+        <div class="border-top px-3 py-2">
+          <p class="mb-0 text-muted" style="font-size:11px; line-height:1.6;">
+            <i class="bi bi-info-circle me-1"></i>
+            Coordenadas en puntos PDF (72 dpi).<br>
+            Compatible con PyMuPDF, pdfplumber, etc.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal extracción de texto -->
+<div class="modal fade" id="extract-modal" tabindex="-1" aria-labelledby="extract-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="extract-modal-label">
+          <i class="bi bi-text-paragraph me-2"></i>Texto extraído
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div id="extract-loading" class="text-center py-5 text-muted d-none">
+          <div class="spinner-border spinner-border-sm me-2"></div> Extrayendo texto...
+        </div>
+        <table class="table table-bordered table-hover mb-0" id="extract-table">
+          <thead class="table-light sticky-top">
+            <tr>
+              <th style="width:25%;">Área</th>
+              <th>Texto extraído</th>
+            </tr>
+          </thead>
+          <tbody id="extract-tbody"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button id="export-csv-btn" class="btn btn-sm btn-outline-secondary btn-toolbar-action">
+          <i class="bi bi-filetype-csv"></i> Exportar CSV
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Toast info-->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+    <div id="toast-msg" class="toast align-items-center text-bg-success border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-body">Exportado correctamente</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

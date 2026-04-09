@@ -1,0 +1,31 @@
+# ── Dependencias
+node_modules/
+
+# ── Variables de entorno
+.env
+.env.local
+.env.production
+.env.*
+
+# ── Logs
+*.log
+npm-debug.log*
+logs/
+
+# ── Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ── LiveKit / build artifacts
+.livekit/
+dist/
+
+# pdf's de prueba
+samples/
