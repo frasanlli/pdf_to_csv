@@ -1,5 +1,5 @@
 # pdf_to_csv
-App web que permite convierte tablas complejas de un pdf a CSV/XLSX mediante el navegador.
+App web que permite convierte tablas complejas de un pdf a CSV mediante el navegador.
 
 # Uso
 1- Abrir index.html en el navegador
@@ -9,7 +9,7 @@ App web que permite convierte tablas complejas de un pdf a CSV/XLSX mediante el 
 ![alt text](images/main.png)
 
 ## Creación de áreas
---Los siguientes pasos pueden omiterse si ya se han realizado con anterioridad y se tiene un json con las áreas--
+-->Los siguientes pasos pueden omiterse si ya se han realizado con anterioridad y se tiene un json con las áreas<--
 
 3- Con el PDF visible, click izquierdo con el ratón y arrastrar para marcar los datos a extraer.
 
@@ -18,6 +18,7 @@ App web que permite convierte tablas complejas de un pdf a CSV/XLSX mediante el 
 5- Repetir en el resto de áreas los puntos 3 al 5
 
 6- Exportar áreas como json
+
 ![alt text](images/areas.png)
 
 ## Extracción de datos
@@ -28,5 +29,12 @@ App web que permite convierte tablas complejas de un pdf a CSV/XLSX mediante el 
 9- Pulsar el botón de "Exportar CSV" para obtener el archivo csv.
 
 NOTA: Para facilitar el manejo de los datos, la tabla se exporta en formato horizontal.
+
 ![alt text](images/extraido.png)
 
+# Pendiente
+- Eliminar etiqueta < th > del csv
+- Evitar título "null" al cancelar creación de un área -> Debe cancelar la creación del área si no tiene título
+- Opción de repetir misma área en todas las páginas del pdf para extraer datos de tablas con mismo formato
+- Mostrar áreas sobre el pdf al importar una plantilla (json)
+- Permitir establecer nombre a las plantillas

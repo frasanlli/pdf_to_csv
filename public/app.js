@@ -233,7 +233,7 @@ function exportJSON() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "areas.json";
+  a.download = "plantilla_areas.json";
   a.click();
   URL.revokeObjectURL(url);
   showToast(`${areas.length} area(s) exportadas`);
