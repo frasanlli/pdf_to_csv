@@ -78,9 +78,14 @@ function drawArea(r) {
 
   ovCtx.fillStyle = color;
   ovCtx.font = "bold 11px sans-serif";
+  ovCtx.strokeStyle = '#000000';
+  ovCtx.lineWidth = 3;
+  ovCtx.lineJoin = 'round';
+  ovCtx.strokeText(r.label, r.x * scale + 4, r.y * scale + 14);
   ovCtx.fillText(r.label, r.x * scale + 4, r.y * scale + 14);
 }
 
+//Dibujo temporal
 function drawCurrentRect() {
   ovCtx.strokeStyle = "#0d6efd";
   ovCtx.lineWidth = 2;
@@ -118,11 +123,11 @@ function updateSidebar() {
           <span class="color-dot" style="background:${color};"></span>
           <span class="fw-semibold flex-grow-1" style="font-size:13px;">${r.label}</span>
           <span class="badge bg-light text-secondary border" style="font-size:10px;">pág. ${r.page}</span>
-          <button class="btn btn-sm btn-link text-secondary p-0"
+          <button class="btn btn-sm btn-outline-primary btn-toolbar-action"
                   onclick="renameArea(${i})" title="Renombrar">
             <i class="bi bi-pencil" style="font-size:12px;"></i>
           </button>
-          <button class="btn btn-sm btn-link text-danger p-0 ms-1"
+          <button class="btn btn-sm btn-outline-danger btn-toolbar-action"
                   onclick="deleteArea(${i})" title="Eliminar">
             <i class="bi bi-x-lg" style="font-size:12px;"></i>
           </button>
@@ -176,24 +181,6 @@ function newNameArea(name = null) {
 
 
 function renameArea(i) {
-
-  /*const newLabel = prompt("Nuevo nombre para el área:", areas[i].label);
-
-  if (newLabel === null) return;
-
-  const trimmed = newLabel.trim();
-
-  if (trimmed === "") {
-    showToast("El nombre no puede estar vacío", "warning");
-    return;
-  }
-
-  if (isLabelDuplicated(trimmed, i)) {
-    showToast(`Ya existe un área con el nombre "${trimmed}"`, "danger");
-    return;
-  }
-
-  areas[i].label = trimmed;*/
   areas[i].label = newNameArea(i)
   redrawOverlay();
   updateSidebar();
