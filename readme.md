@@ -34,5 +34,4 @@ NOTA: Para facilitar el manejo de los datos, la tabla se exporta en formato hori
 
 # Pendiente
 - Evitar título "null" al cancelar creación de un área -> Debe cancelar la creación del área si no tiene título
-- Opción de repetir misma área en todas las páginas del pdf para extraer datos de tablas con mismo formato
 - Permitir establecer nombre a las plantillas

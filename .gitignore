@@ -29,3 +29,6 @@ dist/
 
 # pdf's de prueba
 samples/
+
+# otros
+combinar.py

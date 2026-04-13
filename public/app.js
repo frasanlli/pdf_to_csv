@@ -19,11 +19,13 @@ const pdfWrapper = document.getElementById("pdf-wrapper");
 const placeholder = document.getElementById("placeholder");
 const toastEl = document.getElementById("toast-msg");
 const toastBody = document.getElementById("toast-body");
+const infoCrear = document.getElementById("info-crear");
 const pdfDraw = document.getElementById("pdf-draw");
 const pdfActions = document.getElementById("pdf-actions");
 const extractTbody = document.getElementById("extract-tbody");
 const extractLoading = document.getElementById("extract-loading");
 const extractTable = document.getElementById("extract-table");
+const repeatAreasCheck = document.getElementById('repeat-areas-check');
 //--devuelve el objeto con el que puedes dibujar dentro de ese canvas
 const pdfCtx = pdfCanvas.getContext("2d");
 const ovCtx = overlayCanvas.getContext("2d");
@@ -204,6 +206,7 @@ function loadPDF(file) {
       areas = [];
       placeholder.style.display = "none";
       pdfWrapper.style.display = "block";
+      infoCrear.classList.remove("d-none");
       pdfDraw.classList.remove("d-none");
       renderPDF(currentPage);
       updateSidebar();
@@ -318,23 +321,52 @@ async function extractAllAreas() {
     document.getElementById("extract-modal"),
   ).show();
 
+  // Si la casilla está marcada, replicar las áreas de la página 1 en todas las páginas
+  let areasToExtract = areas;
+  if (repeatAreasCheck.checked && pdfDoc.numPages > 1) {
+    const page1Areas = areas.filter(a => a.page === 1);
+    areasToExtract = [];
+    for (let p = 1; p <= pdfDoc.numPages; p++) {
+      page1Areas.forEach(a => areasToExtract.push({ ...a, page: p }));
+    }
+  }
+
   // Extraer texto de cada área secuencialmente
   const results = [];
-  for (const area of areas) {
+  for (const area of areasToExtract) {
     const text = await extractTextFromArea(area);
     results.push({ label: area.label, text });
   }
+  console.log(results)
+
+  // Agrupar por label
+  const grouped = {};
+
+  for (const r of results) {
+    const label = r.label;
+    const text = (r.text || "").trim();
+
+    if (!grouped[label]) {
+      grouped[label] = [];
+    }
+
+    grouped[label].push(text);
+  }
 
   // Renderizar tabla
-  extractTbody.innerHTML = results
-    .map(
-      (r) => `
-    <tr>
-      <td class="fw-semibold text-nowrap" style="font-size:13px;">${r.label}</td>
-      <td style="font-size:13px; white-space: pre-wrap;">${r.text || '<span class="text-muted fst-italic">-</span>'}</td>
-    </tr>`,
-    )
-    .join("");
+  let tablehtml = `<tr>`
+  // recorrer cada label
+  for (const label in grouped) {
+    tablehtml += `<td class="fw-semibold text-nowrap" style="font-size:13px;">${label}</td>`
+
+    // recorrer cada texto dentro de la label
+    for (const text of grouped[label]) {
+      tablehtml += `<td style="font-size:13px; white-space: pre-wrap;">${text}</td>`
+    }
+    tablehtml += `</tr>`
+  }
+
+  extractTbody.innerHTML = tablehtml
 
   extractLoading.classList.add("d-none");
   extractTable.classList.remove("d-none");

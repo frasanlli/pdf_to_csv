@@ -21,12 +21,12 @@
       <div class="d-flex align-items-center gap-2 flex-wrap">
 
         <span class="fw-semibold text-secondary me-2" style="font-size:13px; white-space:nowrap;">
-          <i class="bi bi-file-earmark-pdf me-1 text-danger"></i>PDF Región Selector
+          <i class="bi bi-file-earmark-pdf me-1 text-danger"></i>PDF selección de áreas
         </span>
 
         <div class="toolbar-sep"></div>
 
-        <label class="btn btn-sm btn-outline-secondary btn-toolbar-action mb-0" style="cursor:pointer;">
+        <label class="btn btn-sm btn-outline-primary btn-toolbar-action mb-0" style="cursor:pointer;">
           <i class="bi bi-upload"></i> Cargar PDF
           <input type="file" accept="application/pdf" id="pdf-input" class="d-none" />
         </label>
@@ -57,9 +57,10 @@
 
         <div class="toolbar-sep d-none d-md-block"></div>
 
-        <span class="badge bg-light text-secondary border d-none d-md-inline-flex align-items-center gap-1"
-          style="font-size:11px;">
-          <i class="bi bi-bounding-box-circles"></i> Arrastra para seleccionar
+        <span id="info-crear"
+          class="badge bg-light text-secondary border d-none"
+          style="font-size:18px;">
+          <i class="bi bi-bounding-box-circles"></i> Arrastra con ratón para crear áreas
         </span>
 
         <div id="pdf-draw" class="ms-auto d-flex gap-2 d-none">
@@ -69,7 +70,7 @@
           <button id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action">
             <i class="bi bi-trash3"></i> Borrar todo
           </button>
-          <button id="load-areas-btn" class="btn btn-sm btn-outline-warning btn-toolbar-action">
+          <button id="load-areas-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
             <i class="bi bi-folder2-open"></i> Cargar plantilla
           </button>
           </div>
@@ -77,9 +78,15 @@
           <button id="export-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
             <i class="bi bi-download"></i> Exportar plantilla
           </button>
-          <button id="extract-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
+          <button id="extract-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
             <i class="bi bi-text-paragraph"></i> Extraer texto
           </button>
+          <div class="form-check mb-0 d-flex align-items-center gap-1" title="Repite las áreas de la página 1 en todas las páginas">
+            <input class="form-check-input mt-0" type="checkbox" id="repeat-areas-check" />
+            <label class="form-check-label text-secondary" for="repeat-areas-check" style="font-size:15px; white-space:nowrap;">
+              Repetir áreas en todas las páginas
+            </label>
+          </div>
         </div>
     </header>
 
