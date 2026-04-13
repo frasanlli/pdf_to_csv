@@ -19,6 +19,7 @@ const pdfWrapper = document.getElementById("pdf-wrapper");
 const placeholder = document.getElementById("placeholder");
 const toastEl = document.getElementById("toast-msg");
 const toastBody = document.getElementById("toast-body");
+const pdfDraw = document.getElementById("pdf-draw");
 const pdfActions = document.getElementById("pdf-actions");
 const extractTbody = document.getElementById("extract-tbody");
 const extractLoading = document.getElementById("extract-loading");
@@ -78,9 +79,9 @@ function drawArea(r) {
 
   ovCtx.fillStyle = color;
   ovCtx.font = "bold 11px sans-serif";
-  ovCtx.strokeStyle = '#000000';
+  ovCtx.strokeStyle = "#000000";
   ovCtx.lineWidth = 3;
-  ovCtx.lineJoin = 'round';
+  ovCtx.lineJoin = "round";
   ovCtx.strokeText(r.label, r.x * scale + 4, r.y * scale + 14);
   ovCtx.fillText(r.label, r.x * scale + 4, r.y * scale + 14);
 }
@@ -97,9 +98,12 @@ function drawCurrentRect() {
 }
 
 function redrawOverlay() {
+
   ovCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-  areas.filter((r) => r.page === currentPage).forEach((r) => drawArea(r));
+  areas
+  .filter((r) => r.page === currentPage)
+  .forEach((r) => drawArea(r));
 
   if (currentRect) drawCurrentRect();
 }
@@ -109,11 +113,12 @@ function updateSidebar() {
   document.getElementById("area-count").textContent = areas.length;
 
   if (areas.length === 0) {
+    pdfActions.classList.add("d-none");
     list.innerHTML =
       '<p class="text-center text-muted mt-4" style="font-size:12px;">Sin áreas aún</p>';
     return;
   }
-
+  pdfActions.classList.remove("d-none");
   list.innerHTML = areas
     .map((r, i) => {
       const color = colorFor(i);
@@ -158,7 +163,7 @@ function newNameArea(name = null) {
 
     const newLabel = prompt(
       `${errorPrefix}${name != null ? "Cambiar nombre para el área:" : "Nombre para la nueva área:"}`,
-      defaultValue
+      defaultValue,
     );
 
     if (newLabel === null) return null;
@@ -179,9 +184,8 @@ function newNameArea(name = null) {
   }
 }
 
-
 function renameArea(i) {
-  areas[i].label = newNameArea(i)
+  areas[i].label = newNameArea(i);
   redrawOverlay();
   updateSidebar();
 }
@@ -200,7 +204,7 @@ function loadPDF(file) {
       areas = [];
       placeholder.style.display = "none";
       pdfWrapper.style.display = "block";
-      pdfActions.classList.remove("d-none");
+      pdfDraw.classList.remove("d-none");
       renderPDF(currentPage);
       updateSidebar();
       showToast(`PDF cargado: ${doc.numPages} página(s)`);
@@ -280,23 +284,29 @@ function loadJSONFile() {
   });
 }
 
+async function loadAreasFromJSON() {
+  let loaded;
+  try {
+    loaded = await loadJSONFile();
+  } catch (err) {
+    showToast(`Error al cargar el JSON: ${err}`, 'danger');
+    return;
+  }
+
+  if (!Array.isArray(loaded) || loaded.length === 0) {
+    showToast('El JSON no contiene áreas válidas', 'warning');
+    return;
+  }
+
+  areas = loaded;
+  redrawOverlay();
+  updateSidebar();
+  showToast(`${areas.length} área(s) cargadas`);
+}
+
 async function extractAllAreas() {
   if (!pdfDoc) {
     showToast("No hay PDF cargado", "warning");
-    return;
-  }
-
-  // Solicitar el JSON con las coordenadas
-  let areasFromJSON;
-  try {
-    areasFromJSON = await loadJSONFile();
-  } catch (err) {
-    showToast(`Error al cargar el JSON: ${err}`, "danger");
-    return;
-  }
-
-  if (!Array.isArray(areasFromJSON) || areasFromJSON.length === 0) {
-    showToast("El JSON no contiene áreas válidas", "warning");
     return;
   }
 
@@ -310,7 +320,7 @@ async function extractAllAreas() {
 
   // Extraer texto de cada área secuencialmente
   const results = [];
-  for (const area of areasFromJSON) {
+  for (const area of areas) {
     const text = await extractTextFromArea(area);
     results.push({ label: area.label, text });
   }
@@ -340,24 +350,28 @@ function exportCSV() {
   // Leer la tabla en una matriz [fila][columna]
   const matriz = [];
   for (let fila of tabla.rows) {
-    let cols = fila.querySelectorAll("td, th");
-    let filaData = [];
-    cols.forEach((col) => {
-      filaData.push(col.innerText.replace(/"/g, '""'));
-    });
-    matriz.push(filaData);
+    if (fila != tabla.rows[0]) {
+      let cols = fila.querySelectorAll("td");
+      let filaData = [];
+      cols.forEach((col) => {
+        filaData.push(col.innerText.replace(/"/g, '""'));
+      });
+      matriz.push(filaData);
+    }
   }
 
   // Transponer: matriz[fila][col] → transpuesta[col][fila]
-  const numCols = Math.max(...matriz.map(f => f.length));
+  const numCols = Math.max(...matriz.map((f) => f.length));
   const transpuesta = Array.from({ length: numCols }, (_, col) =>
-    matriz.map(fila => `"${fila[col] ?? ""}"`)
+    matriz.map((fila) => `"${fila[col] ?? ""}"`),
   );
 
-  const csvString = transpuesta.map(fila => fila.join(";")).join("\n");
+  const csvString = transpuesta.map((fila) => fila.join(";")).join("\n");
 
   // Descargar archivo
-  const blob = new Blob(["\uFEFF" + csvString], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob(["\uFEFF" + csvString], {
+    type: "text/csv;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -394,10 +408,10 @@ overlayCanvas.addEventListener("mousemove", (e) => {
 overlayCanvas.addEventListener("mouseup", () => {
   if (!drawing) return;
   drawing = false;
-  let newName = newNameArea()
+  let newName = newNameArea();
   if (currentRect && currentRect.w > 5 && currentRect.h > 5) {
     areas.push({
-      label: newName,//(`R${areas.length + 1}`),
+      label: newName, //(`R${areas.length + 1}`),
       page: currentPage,
       x: Math.round(currentRect.x / scale),
       y: Math.round(currentRect.y / scale),
@@ -469,12 +483,16 @@ document.getElementById("clear-all-btn").addEventListener("click", () => {
   }
 });
 
+document.getElementById('load-areas-btn').addEventListener('click', loadAreasFromJSON);
+
 //----Exportar datos a json
 document.getElementById("export-btn").addEventListener("click", exportJSON);
 
 //----tabla y csv
-document
-  .getElementById("extract-btn")
-  .addEventListener("click", extractAllAreas);
+document.getElementById('extract-btn')
+.addEventListener('click', () => {
+  if (areas.length === 0) { showToast('No hay áreas definidas', 'warning'); return; }
+  extractAllAreas();
+});
 
 document.getElementById("export-csv-btn").addEventListener("click", exportCSV);
