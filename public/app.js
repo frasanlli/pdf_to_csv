@@ -216,18 +216,28 @@ function loadPDF(file) {
   reader.readAsArrayBuffer(file);
 }
 
+function askFileName(defaultName, extension) {
+  const input = prompt(`Nombre del archivo (sin extensión):`, defaultName);
+  if (input === null) return null;
+  const name = input.trim() || defaultName;
+  return `${name}.${extension}`;
+}
+
 function exportJSON() {
   if (areas.length === 0) {
     showToast("No hay áreas para exportar", "warning");
     return;
   }
+  const filename = askFileName('areas', 'json');
+  if (!filename) return;
+
   const blob = new Blob([JSON.stringify(areas, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "plantilla_areas.json";
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
   showToast(`${areas.length} area(s) exportadas`);
@@ -400,6 +410,9 @@ function exportCSV() {
 
   const csvString = transpuesta.map((fila) => fila.join(";")).join("\n");
 
+  const filename = askFileName('extraccion', 'csv');
+  if (!filename) return;
+
   // Descargar archivo
   const blob = new Blob(["\uFEFF" + csvString], {
     type: "text/csv;charset=utf-8;",
@@ -407,7 +420,7 @@ function exportCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "datos.csv";
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -441,7 +454,7 @@ overlayCanvas.addEventListener("mouseup", () => {
   if (!drawing) return;
   drawing = false;
   let newName = newNameArea();
-  if (currentRect && currentRect.w > 5 && currentRect.h > 5) {
+  if (newName && currentRect && currentRect.w > 5 && currentRect.h > 5) {
     areas.push({
       label: newName, //(`R${areas.length + 1}`),
       page: currentPage,

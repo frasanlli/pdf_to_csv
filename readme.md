@@ -41,8 +41,5 @@ NOTA: Para facilitar el manejo de los datos, la tabla se exporta en formato hori
 
 ![alt text](images/extraido.png)
 
-# Pendiente
-- Corregir error al seleccionar áreas de páginas distintas a la 1ra
-- Evitar título "null" al cancelar creación de un área -> Debe cancelar la creación del área si no tiene título
-- Permitir dar nombre a las plantillas
-- Permitir dar nombre al csv extraído
+# Ideas de mejora
+- Añadir opción para unir pdf's en un nuevo archivo
