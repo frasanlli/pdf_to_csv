@@ -579,6 +579,4 @@ toggleBtn.addEventListener("click", () => {
 
   const isCollapsed = sidebar.classList.contains("collapsed");
 
-  icon.classList.toggle("bi-chevron-left", !isCollapsed);
-  icon.classList.toggle("bi-chevron-right", isCollapsed);
 });
