@@ -579,17 +579,3 @@ document.getElementById("extract-btn").addEventListener("click", () => {
 });
 
 document.getElementById("export-csv-btn").addEventListener("click", exportCSV);
-
-
-//SIDEBAR
-
-const sidebar = document.getElementById("sidebar");
-const toggleBtn = document.getElementById("toggle-sidebar");
-const icon = document.getElementById("sidebar-icon");
-
-toggleBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("collapsed");
-
-  const isCollapsed = sidebar.classList.contains("collapsed");
-
-});
