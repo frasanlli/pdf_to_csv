@@ -20,12 +20,17 @@ const placeholder = document.getElementById("placeholder");
 const toastEl = document.getElementById("toast-msg");
 const toastBody = document.getElementById("toast-body");
 const infoCrear = document.getElementById("info-crear");
-const pdfDraw = document.getElementById("pdf-draw");
-const pdfActions = document.getElementById("pdf-actions");
+const clearBtn = document.getElementById("clear-btn");
+const clearAllBtn = document.getElementById("clear-all-btn");
+const loadAreasBtn = document.getElementById("load-areas-btn");
+const extractBtn = document.getElementById("extract-btn");
+const exportBtn = document.getElementById("export-btn");
+const formRepeat = document.getElementById("form-repeat");
 const extractTbody = document.getElementById("extract-tbody");
 const extractLoading = document.getElementById("extract-loading");
 const extractTable = document.getElementById("extract-table");
 const repeatAreasCheck = document.getElementById("repeat-areas-check");
+const navigate = document.getElementById("navigate");
 //--devuelve el objeto con el que puedes dibujar dentro de ese canvas
 const pdfCtx = pdfCanvas.getContext("2d");
 const ovCtx = overlayCanvas.getContext("2d");
@@ -112,12 +117,20 @@ function updateSidebar() {
   document.getElementById("area-count").textContent = areas.length;
 
   if (areas.length === 0) {
-    pdfActions.classList.add("d-none");
+    clearBtn.classList.add("d-none");
+    clearAllBtn.classList.add("d-none");
+    extractBtn.classList.add("d-none");
+    exportBtn.classList.add("d-none");
+    formRepeat.classList.add("d-none");
     list.innerHTML =
       '<p class="text-center text-muted mt-4" style="font-size:12px;">Sin áreas aún</p>';
     return;
   }
-  pdfActions.classList.remove("d-none");
+  clearBtn.classList.remove("d-none");
+  clearAllBtn.classList.remove("d-none");
+  extractBtn.classList.remove("d-none");
+  exportBtn.classList.remove("d-none");
+  formRepeat.classList.remove("d-none");
   list.innerHTML = areas
     .map((r, i) => {
       const color = colorFor(i);
@@ -203,8 +216,8 @@ function loadPDF(file) {
       areas = [];
       placeholder.style.display = "none";
       pdfWrapper.style.display = "block";
-      infoCrear.classList.remove("d-none");
-      pdfDraw.classList.remove("d-none");
+      navigate.classList.remove("d-none");
+      loadAreasBtn.classList.remove("d-none");
       renderPDF(currentPage);
       updateSidebar();
       showToast(`PDF cargado: ${doc.numPages} página(s)`);

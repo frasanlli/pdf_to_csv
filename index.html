@@ -13,9 +13,7 @@
 </head>
 
 <body>
-
   <div id="app">
-
     <!-- TOOLBAR -->
     <header id="toolbar">
       <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -60,61 +58,56 @@
           Arrastra y crea áreas
         </span>
       </div>
-      <div class="container pw-50 mx-auto">
-      <nav class="navbar navbar-expand-lg">
+
+      <nav class="navbar navbar-expand-lg d-none" id="navigate">
         <!-- Botón hamburguesa -->
         <button class="navbar-toggler btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
           data-bs-target="#toolbarNavbar" aria-controls="toolbarNavbar" aria-expanded="false"
           aria-label="Toggle navigation">
-          <i class="bi bi-tools"> </i>Herramientas
+          <i class="bi bi-tools"> </i>
+          <span class="desktop-text">Herramientas</span>
         </button>
 
         <div class="collapse navbar-collapse" id="toolbarNavbar">
 
           <ul class="navbar-nav mr-auto align-items-center gap-2">
-            <li id="pdf-draw" class="nav-item">
-              <li id="clear-btn" class="nav-item btn btn-sm btn-outline-secondary btn-toolbar-action">
+
+              <li id="clear-btn" class="nav-item btn btn-sm btn-outline-secondary btn-toolbar-action d-none">
                 <i class="bi bi-eraser"></i>
                 <span>Limpiar página</span>
               </li>
 
-              <li id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action">
+              <li id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action d-none">
                 <i class="bi bi-trash3"></i>
                 <span>Borrar todo</span>
               </li>
 
-              <li id="load-areas-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
+              <li id="load-areas-btn" class="btn btn-sm btn-outline-success btn-toolbar-action d-none">
                 <i class="bi bi-folder2-open"></i>
                 <span>Cargar plantilla</span>
               </li>
-            </li>
-
 
               <!-- IZQUIERDA: botones -->
-                <li id="export-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
+                <li id="export-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action d-none">
                   <i class="bi bi-file-arrow-down"></i>
                   Exportar plantilla
                 </li>
-                <li id="extract-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
+                <li id="extract-btn" class="btn btn-sm btn-outline-success btn-toolbar-action d-none">
                   <i class="bi bi-download"></i>
                   Extraer
                 </li>
 
               <!-- DERECHA: formulario -->
-              <li class="form-check mb-0 d-flex align-items-center gap-1 flex-wrap">
-
+              <li class="form-check mb-0 d-flex align-items-center gap-1 flex-wrap d-none" id="form-repeat">
                 <input class="form-check-input mt-0" type="checkbox" id="repeat-areas-check" />
-
                 <label id="texto-repetir" class="form-check-label text-secondary repeat-label" for="repeat-areas-check">
                   Repetir áreas
                 </label>
-
               </li>
+
           </ul>
         </div>
       </nav>
-      </div>
-
     </header>
 
     <!-- MAIN -->
