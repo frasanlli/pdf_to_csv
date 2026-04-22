@@ -156,12 +156,15 @@ body {
         touch-action: pan-x pan-y;
     }
     #info-crear{
-        font-size: small;
+        font-size: xx-small;
     }
     #pdf-draw{
-        font-size: small;
+        font-size: xx-small;
     }
     #pdf-actions{
-        font-size: small;
+        font-size: xx-small;
+    }
+    #texto-repetir{
+        font-size: xx-small;
     }
 }
