@@ -76,11 +76,6 @@ body {
     display: none;
 }
 
-/* centrar badge cuando está cerrado */
-#sidebar.collapsed .border-bottom {
-    justify-content: center !important;
-}
-
 #areas-list {
     flex: 1;
     overflow-y: auto;
@@ -180,5 +175,17 @@ body {
 
     #info-crear {
         display: none;
+    }
+
+    .toolbar {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .toolbar button {
+        flex: 0 0 auto;
     }
 }
