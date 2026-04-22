@@ -57,37 +57,36 @@
 
         <div class="toolbar-sep d-none d-md-block"></div>
 
-        <span id="info-crear" class="badge bg-light text-secondary border d-none" style="font-size:18px;">
-          <i class="bi bi-bounding-box-circles"></i> Arrastra con ratón para crear áreas
+        <span id="info-crear" class="badge bg-light text-secondary border d-none info-text">
+          <i class="bi bi-bounding-box-circles"></i>
+          Arrastra y crea áreas
         </span>
 
-        <div id="pdf-draw" class="ms-auto d-flex gap-2 d-none">
-          <button id="clear-btn" class="btn btn-sm btn-outline-secondary btn-toolbar-action">
-            <i class="bi bi-eraser"></i> Limpiar página
+        <div id="pdf-draw" class="ms-auto d-flex gap-2 d-none"> <button id="clear-btn"
+            class="btn btn-sm btn-outline-secondary btn-toolbar-action"> <i class="bi bi-eraser"></i> Limpiar página
+          </button> <button id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action">
+            <i class="bi bi-trash3"></i>
+            Borrar todo
           </button>
-          <button id="clear-all-btn" class="btn btn-sm btn-outline-danger btn-toolbar-action">
-            <i class="bi bi-trash3"></i> Borrar todo
-          </button>
-          <button id="load-areas-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
-            <i class="bi bi-folder2-open"></i> Cargar plantilla
+          <button id="load-areas-btn"
+            class="btn btn-sm btn-outline-success btn-toolbar-action">
+            <i class="bi bi-folder2-open"></i>
+            Cargar plantilla
           </button>
         </div>
         <div id="pdf-actions" class="ms-auto d-flex gap-2 d-none">
           <button id="export-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
-            <i class="bi bi-download"></i> Exportar plantilla
+            <i class="bi bi-download"></i>
+            Exportar plantilla
           </button>
           <button id="extract-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
-            <i class="bi bi-text-paragraph"></i> Extraer texto
+            <i class="bi bi-text-paragraph"></i>
+            Extraer texto
           </button>
           <div class="form-check mb-0 d-flex align-items-center gap-1 flex-wrap">
             <input class="form-check-input mt-0" type="checkbox" id="repeat-areas-check" />
-            <label class="form-check-label text-secondary repeat-label" for="repeat-areas-check">
-              <span class="d-none d-md-inline">
-                Repetir áreas en todas las páginas
-              </span>
-              <span class="d-inline d-md-none">
-                Repetir áreas
-              </span>
+            <label id="texto-repetir" class="form-check-label text-secondary repeat-label" for="repeat-areas-check">
+              Repetir áreas en todas las páginas
             </label>
           </div>
         </div>
