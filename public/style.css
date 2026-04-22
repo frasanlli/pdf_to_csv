@@ -51,6 +51,7 @@ body {
     top: 0;
     left: 0;
     pointer-events: all;
+    touch-action: none;
 }
 
 #sidebar {
@@ -148,9 +149,6 @@ body {
     #canvas-area {
         padding: 12px;
         justify-content: flex-start;
+        touch-action: pan-x pan-y;
     }
-}
-
-canvas {
-  touch-action: none;
 }

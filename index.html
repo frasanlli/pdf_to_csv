@@ -57,9 +57,7 @@
 
         <div class="toolbar-sep d-none d-md-block"></div>
 
-        <span id="info-crear"
-          class="badge bg-light text-secondary border d-none"
-          style="font-size:18px;">
+        <span id="info-crear" class="badge bg-light text-secondary border d-none" style="font-size:18px;">
           <i class="bi bi-bounding-box-circles"></i> Arrastra con ratón para crear áreas
         </span>
 
@@ -73,18 +71,23 @@
           <button id="load-areas-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
             <i class="bi bi-folder2-open"></i> Cargar plantilla
           </button>
-          </div>
-          <div id="pdf-actions" class="ms-auto d-flex gap-2 d-none">
+        </div>
+        <div id="pdf-actions" class="ms-auto d-flex gap-2 d-none">
           <button id="export-btn" class="btn btn-sm btn-outline-primary btn-toolbar-action">
             <i class="bi bi-download"></i> Exportar plantilla
           </button>
           <button id="extract-btn" class="btn btn-sm btn-outline-success btn-toolbar-action">
             <i class="bi bi-text-paragraph"></i> Extraer texto
           </button>
-          <div class="form-check mb-0 d-flex align-items-center gap-1" title="Repite las áreas de la página 1 en todas las páginas">
+          <div class="form-check mb-0 d-flex align-items-center gap-1 flex-wrap">
             <input class="form-check-input mt-0" type="checkbox" id="repeat-areas-check" />
-            <label class="form-check-label text-secondary" for="repeat-areas-check" style="font-size:15px; white-space:nowrap;">
-              Repetir áreas en todas las páginas
+            <label class="form-check-label text-secondary repeat-label" for="repeat-areas-check">
+              <span class="d-none d-md-inline">
+                Repetir áreas en todas las páginas
+              </span>
+              <span class="d-inline d-md-none">
+                Repetir áreas
+              </span>
             </label>
           </div>
         </div>
@@ -124,38 +127,38 @@
   </div>
 
   <!-- Modal extracción de texto -->
-<div class="modal fade" id="extract-modal" tabindex="-1" aria-labelledby="extract-modal-label" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="extract-modal-label">
-          <i class="bi bi-text-paragraph me-2"></i>Texto extraído
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div id="extract-loading" class="text-center py-5 text-muted d-none">
-          <div class="spinner-border spinner-border-sm me-2"></div> Extrayendo texto...
+  <div class="modal fade" id="extract-modal" tabindex="-1" aria-labelledby="extract-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="extract-modal-label">
+            <i class="bi bi-text-paragraph me-2"></i>Texto extraído
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <table class="table table-bordered table-hover mb-0" id="extract-table">
-          <thead class="table-light sticky-top">
-            <tr>
-              <th style="width:25%;">Área</th>
-              <th>Texto extraído</th>
-            </tr>
-          </thead>
-          <tbody id="extract-tbody"></tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button id="export-csv-btn" class="btn btn-sm btn-outline-secondary btn-toolbar-action">
-          <i class="bi bi-filetype-csv"></i> Exportar CSV
-        </button>
-        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <div class="modal-body p-0">
+          <div id="extract-loading" class="text-center py-5 text-muted d-none">
+            <div class="spinner-border spinner-border-sm me-2"></div> Extrayendo texto...
+          </div>
+          <table class="table table-bordered table-hover mb-0" id="extract-table">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="width:25%;">Área</th>
+                <th>Texto extraído</th>
+              </tr>
+            </thead>
+            <tbody id="extract-tbody"></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button id="export-csv-btn" class="btn btn-sm btn-outline-secondary btn-toolbar-action">
+            <i class="bi bi-filetype-csv"></i> Exportar CSV
+          </button>
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Toast info-->
   <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
