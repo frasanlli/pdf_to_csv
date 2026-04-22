@@ -124,15 +124,29 @@
       </div>
 
       <!-- Sidebar -->
-      <div id="sidebar">
+      <div id="sidebar" class="sidebar-collapsed">
+
         <div class="px-3 py-2 border-bottom d-flex align-items-center justify-content-between">
-          <span class="fw-semibold" style="font-size:13px;">Áreas seleccionadas</span>
-          <span id="area-count" class="badge bg-secondary rounded-pill">0</span>
+
+          <div class="d-flex align-items-center gap-2">
+
+            <span id="area-count" class="badge bg-secondary rounded-pill">0</span>
+
+            <button id="toggle-sidebar" class="btn btn-sm btn-outline-secondary p-1" title="Expandir / Colapsar">
+              <i class="bi bi-chevron-left" id="sidebar-icon"></i>
+              <span class="fw-semibold" style="font-size:13px;">
+                Áreas
+              </span>
+            </button>
+          </div>
         </div>
 
         <div id="areas-list">
-          <p id="empty-msg" class="text-center text-muted mt-4" style="font-size:12px;">Sin selección</p>
+          <p id="empty-msg" class="text-center text-muted mt-4" style="font-size:12px;">
+            Sin selección
+          </p>
         </div>
+
       </div>
 
     </div>
