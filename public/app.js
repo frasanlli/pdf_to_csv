@@ -25,7 +25,7 @@ const pdfActions = document.getElementById("pdf-actions");
 const extractTbody = document.getElementById("extract-tbody");
 const extractLoading = document.getElementById("extract-loading");
 const extractTable = document.getElementById("extract-table");
-const repeatAreasCheck = document.getElementById('repeat-areas-check');
+const repeatAreasCheck = document.getElementById("repeat-areas-check");
 //--devuelve el objeto con el que puedes dibujar dentro de ese canvas
 const pdfCtx = pdfCanvas.getContext("2d");
 const ovCtx = overlayCanvas.getContext("2d");
@@ -100,12 +100,9 @@ function drawCurrentRect() {
 }
 
 function redrawOverlay() {
-
   ovCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-  areas
-  .filter((r) => r.page === currentPage)
-  .forEach((r) => drawArea(r));
+  areas.filter((r) => r.page === currentPage).forEach((r) => drawArea(r));
 
   if (currentRect) drawCurrentRect();
 }
@@ -228,7 +225,7 @@ function exportJSON() {
     showToast("No hay áreas para exportar", "warning");
     return;
   }
-  const filename = askFileName('areas', 'json');
+  const filename = askFileName("areas", "json");
   if (!filename) return;
 
   const blob = new Blob([JSON.stringify(areas, null, 2)], {
@@ -302,12 +299,12 @@ async function loadAreasFromJSON() {
   try {
     loaded = await loadJSONFile();
   } catch (err) {
-    showToast(`Error al cargar el JSON: ${err}`, 'danger');
+    showToast(`Error al cargar el JSON: ${err}`, "danger");
     return;
   }
 
   if (!Array.isArray(loaded) || loaded.length === 0) {
-    showToast('El JSON no contiene áreas válidas', 'warning');
+    showToast("El JSON no contiene áreas válidas", "warning");
     return;
   }
 
@@ -334,10 +331,10 @@ async function extractAllAreas() {
   // Si la casilla está marcada, replicar las áreas de la página 1 en todas las páginas
   let areasToExtract = areas;
   if (repeatAreasCheck.checked && pdfDoc.numPages > 1) {
-    const page1Areas = areas.filter(a => a.page === 1);
+    const page1Areas = areas.filter((a) => a.page === 1);
     areasToExtract = [];
     for (let p = 1; p <= pdfDoc.numPages; p++) {
-      page1Areas.forEach(a => areasToExtract.push({ ...a, page: p }));
+      page1Areas.forEach((a) => areasToExtract.push({ ...a, page: p }));
     }
   }
 
@@ -347,7 +344,7 @@ async function extractAllAreas() {
     const text = await extractTextFromArea(area);
     results.push({ label: area.label, text });
   }
-  console.log(results)
+  console.log(results);
 
   // Agrupar por label
   const grouped = {};
@@ -364,19 +361,19 @@ async function extractAllAreas() {
   }
 
   // Renderizar tabla
-  let tablehtml = `<tr>`
+  let tablehtml = `<tr>`;
   // recorrer cada label
   for (const label in grouped) {
-    tablehtml += `<td class="fw-semibold text-nowrap" style="font-size:13px;">${label}</td>`
+    tablehtml += `<td class="fw-semibold text-nowrap" style="font-size:13px;">${label}</td>`;
 
     // recorrer cada texto dentro de la label
     for (const text of grouped[label]) {
-      tablehtml += `<td style="font-size:13px; white-space: pre-wrap;">${text}</td>`
+      tablehtml += `<td style="font-size:13px; white-space: pre-wrap;">${text}</td>`;
     }
-    tablehtml += `</tr>`
+    tablehtml += `</tr>`;
   }
 
-  extractTbody.innerHTML = tablehtml
+  extractTbody.innerHTML = tablehtml;
 
   extractLoading.classList.add("d-none");
   extractTable.classList.remove("d-none");
@@ -410,7 +407,7 @@ function exportCSV() {
 
   const csvString = transpuesta.map((fila) => fila.join(";")).join("\n");
 
-  const filename = askFileName('extraccion', 'csv');
+  const filename = askFileName("extraccion", "csv");
   if (!filename) return;
 
   // Descargar archivo
@@ -427,16 +424,46 @@ function exportCSV() {
 
 // EVENTOS
 // Dibujo sobre el canvas
-overlayCanvas.addEventListener("mousedown", (e) => {
+overlayCanvas.addEventListener("pointerdown", (e) => {
   if (!pdfDoc) return;
+
   const rect = overlayCanvas.getBoundingClientRect();
-  startX = e.clientX - rect.left;
-  startY = e.clientY - rect.top;
-  drawing = true;
-  currentRect = { x: startX, y: startY, w: 0, h: 0 };
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  if (!drawing) {
+    startX = x;
+    startY = y;
+    drawing = true;
+    currentRect = { x, y, w: 0, h: 0 };
+
+    if (e.pointerType === "touch") {
+      overlayCanvas.setPointerCapture(e.pointerId);
+    }
+
+    return
+  }
+
+  if (drawing && e.pointerType === "mouse") {
+    let newName = newNameArea();
+    if (newName && currentRect && currentRect.w > 5 && currentRect.h > 5) {
+      areas.push({
+        label: newName, //(`R${areas.length + 1}`),
+        page: currentPage,
+        x: Math.round(currentRect.x / scale),
+        y: Math.round(currentRect.y / scale),
+        w: Math.round(currentRect.w / scale),
+        h: Math.round(currentRect.h / scale),
+      });
+      updateSidebar();
+    }
+    currentRect = null;
+    redrawOverlay();
+    drawing = false;
+  }
 });
 
-overlayCanvas.addEventListener("mousemove", (e) => {
+overlayCanvas.addEventListener("pointermove", (e) => {
   if (!drawing) return;
   const rect = overlayCanvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
@@ -450,31 +477,25 @@ overlayCanvas.addEventListener("mousemove", (e) => {
   redrawOverlay();
 });
 
-overlayCanvas.addEventListener("mouseup", () => {
+overlayCanvas.addEventListener("pointerup", (e) => {
+  if (e.pointerType !== "touch") return;
   if (!drawing) return;
-  drawing = false;
+  overlayCanvas.releasePointerCapture(e.pointerId);
   let newName = newNameArea();
-  if (newName && currentRect && currentRect.w > 5 && currentRect.h > 5) {
-    areas.push({
-      label: newName, //(`R${areas.length + 1}`),
-      page: currentPage,
-      x: Math.round(currentRect.x / scale),
-      y: Math.round(currentRect.y / scale),
-      w: Math.round(currentRect.w / scale),
-      h: Math.round(currentRect.h / scale),
-    });
-    updateSidebar();
-  }
-  currentRect = null;
-  redrawOverlay();
-});
-
-overlayCanvas.addEventListener("mouseleave", () => {
-  if (drawing) {
-    drawing = false;
+    if (newName && currentRect && currentRect.w > 5 && currentRect.h > 5) {
+      areas.push({
+        label: newName, //(`R${areas.length + 1}`),
+        page: currentPage,
+        x: Math.round(currentRect.x / scale),
+        y: Math.round(currentRect.y / scale),
+        w: Math.round(currentRect.w / scale),
+        h: Math.round(currentRect.h / scale),
+      });
+      updateSidebar();
+    }
     currentRect = null;
     redrawOverlay();
-  }
+    drawing = false;
 });
 
 //--Toolbar
@@ -528,15 +549,19 @@ document.getElementById("clear-all-btn").addEventListener("click", () => {
   }
 });
 
-document.getElementById('load-areas-btn').addEventListener('click', loadAreasFromJSON);
+document
+  .getElementById("load-areas-btn")
+  .addEventListener("click", loadAreasFromJSON);
 
 //----Exportar datos a json
 document.getElementById("export-btn").addEventListener("click", exportJSON);
 
 //----tabla y csv
-document.getElementById('extract-btn')
-.addEventListener('click', () => {
-  if (areas.length === 0) { showToast('No hay áreas definidas', 'warning'); return; }
+document.getElementById("extract-btn").addEventListener("click", () => {
+  if (areas.length === 0) {
+    showToast("No hay áreas definidas", "warning");
+    return;
+  }
   extractAllAreas();
 });
 
