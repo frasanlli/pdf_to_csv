@@ -19,9 +19,7 @@ body {
     padding: 8px 16px;
 }
 
-#info-crear{
-        font-size: 18px;
-    }
+
 
 #main {
     display: flex;
@@ -138,7 +136,7 @@ body {
     color: #343a40;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     #main {
         flex-direction: column;
     }
@@ -155,16 +153,7 @@ body {
         justify-content: flex-start;
         touch-action: pan-x pan-y;
     }
-    #info-crear{
-        font-size: xx-small;
-    }
-    #pdf-draw{
-        font-size: xx-small;
-    }
-    #pdf-actions{
-        font-size: xx-small;
-    }
-    #texto-repetir{
-        font-size: xx-small;
+    .desktop-text{
+        display: none;
     }
 }
