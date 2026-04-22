@@ -439,6 +439,7 @@ function exportCSV() {
 // Dibujo sobre el canvas
 overlayCanvas.addEventListener("pointerdown", (e) => {
   if (!pdfDoc) return;
+  if (e.pointerType === "touch" && !floatingIsActive) return;
 
   const rect = overlayCanvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -579,3 +580,23 @@ document.getElementById("extract-btn").addEventListener("click", () => {
 });
 
 document.getElementById("export-csv-btn").addEventListener("click", exportCSV);
+
+const floatingBtn = document.getElementById("floatingBtn");
+const floatingIcon = document.getElementById("floatingIcon");
+let floatingIsActive = false;
+
+floatingBtn.addEventListener("click", () => {
+  floatingIsActive = !floatingIsActive;
+
+  if (floatingIsActive) {
+    floatingBtn.classList.remove("btn-danger");
+    floatingBtn.classList.add("btn-primary");
+    floatingIcon.classList.remove("bi-pencil");
+    floatingIcon.classList.add("bi-pencil-fill");
+  } else {
+    floatingBtn.classList.remove("btn-primary");
+    floatingBtn.classList.add("btn-danger");
+    floatingIcon.classList.remove("bi-pencil-fill");
+    floatingIcon.classList.add("bi-pencil");
+  }
+});
