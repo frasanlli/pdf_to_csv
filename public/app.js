@@ -593,10 +593,12 @@ floatingBtn.addEventListener("click", () => {
     floatingBtn.classList.add("btn-primary");
     floatingIcon.classList.remove("bi-pencil");
     floatingIcon.classList.add("bi-pencil-fill");
+    overlayCanvas.style.touchAction = "none";
   } else {
     floatingBtn.classList.remove("btn-primary");
     floatingBtn.classList.add("btn-danger");
     floatingIcon.classList.remove("bi-pencil-fill");
     floatingIcon.classList.add("bi-pencil");
+    overlayCanvas.style.touchAction = "auto";
   }
 });
