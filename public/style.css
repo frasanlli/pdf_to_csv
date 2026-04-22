@@ -65,16 +65,6 @@ body {
     flex-direction: column;
 }
 
-/* estado colapsado */
-#sidebar.collapsed {
-    width: 150px;
-}
-
-/* ocultar contenido cuando está cerrado */
-#areas-list {
-    display: none;
-}
-
 #areas-list {
     flex: 1;
     overflow-y: auto;
@@ -152,14 +142,10 @@ body {
 
     #sidebar {
         width: 100%;
-        height: 180px;
+        height: 40px;
         /* ajustable */
         border-left: none;
         border-top: 1px solid #dee2e6;
-    }
-
-    #sidebar.collapsed {
-        height: 60px;
     }
 
     #canvas-area {
