@@ -72,7 +72,7 @@ body {
 }
 
 /* ocultar contenido cuando está cerrado */
-#sidebar.collapsed #areas-list {
+#areas-list {
     display: none;
 }
 
