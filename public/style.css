@@ -135,6 +135,13 @@ body {
     color: #343a40;
 }
 
+#tools-btn{
+        background-color: rgb(252, 252, 121);
+    &:hover{
+        background-color: rgb(121, 134, 252);
+    }
+}
+
 @media (max-width: 800px) {
     #main {
         flex-direction: column;
