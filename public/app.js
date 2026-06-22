@@ -44,6 +44,7 @@ let drawing = false;
 let startX,
   startY,
   currentRect = null;
+let loadedPdf = false;
 
 // Funciones
 // --Colores de los rectángulos dibujados
@@ -224,6 +225,7 @@ function loadPDF(file) {
     });
   };
   reader.readAsArrayBuffer(file);
+  loadedPdf = true
 }
 
 function askFileName(defaultName, extension) {
@@ -604,3 +606,49 @@ floatingBtn.addEventListener("click", () => {
     overlayCanvas.style.pointerEvents = "none";
   }
 });
+
+window.addEventListener('beforeunload', (event) => {
+  if (loadedPdf){
+    event.preventDefault();
+    event.returnValue = '';
+  }
+});
+
+//locaStorage
+
+/*function saveCanvas(id, key) {
+    const canvas = document.getElementById(id)
+    const dataURL = canvas.toDataURL("image/png");
+    localStorage.setItem(key, dataURL);
+}
+
+function restoreCanvas(storageKey, canvasId) {
+  const data = localStorage.getItem(storageKey);
+  if (!data) return false;
+
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  const img = new Image();
+
+  img.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+  };
+
+  img.src = data;
+  return true
+}*/
+
+
+/*document.addEventListener("DOMContentLoaded", async (event) => {
+  const exist = localStorage.getItem("pdfCanvas")
+  if (exist){
+    placeholder.style.display = "none";
+    pdfWrapper.style.display = "block";
+    navigate.classList.remove("d-none");
+    loadAreasBtn.classList.remove("d-none");
+    restoreCanvas("pdfCanvas", "pdf-canvas")
+    //restoreCanvas("overlayCanvas", "overlay-canvas")
+    //updateSidebar()
+  }
+})*/

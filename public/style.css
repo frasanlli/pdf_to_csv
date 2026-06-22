@@ -135,12 +135,17 @@ body {
     color: #343a40;
 }
 
+#zoom-info{
+    width: 60px;
+}
+
 #tools-btn{
         background-color: rgb(252, 252, 121);
     &:hover{
         background-color: rgb(121, 134, 252);
     }
 }
+
 
 @media (max-width: 800px) {
     #main {
@@ -183,4 +188,9 @@ body {
     .toolbar button {
         flex: 0 0 auto;
     }
+}
+
+#zoom-info{
+    padding: auto;
+    margin: auto;
 }
